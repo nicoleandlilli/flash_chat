@@ -1,13 +1,18 @@
 
+import 'package:flash_chat/screenss/login_screen.dart';
+import 'package:flash_chat/screenss/registration_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget{
 
+  static const String  id = 'welcome_screen';
+
     @override
     _WelcomeScreenState createState() => _WelcomeScreenState();
 
 }
+
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
@@ -20,9 +25,57 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children:<Widget> [
-            Container(
-              height: 200.0,
-
+            Row(
+              children: <Widget>[
+                Container(
+                  height: 60.0,
+                  child: Image.asset('images/logo.png'),
+                ),
+                Text('Flash Chat',
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 45.0,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 48.0,
+            ),
+            Padding(padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Material(
+                elevation: 5.0,
+                color: Colors.lightBlueAccent,
+                borderRadius: BorderRadius.circular(30.0),
+                child: MaterialButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, LoginScreen.id);
+                  },
+                  minWidth: 200.0,
+                  height: 42.0,
+                  child: Text(
+                    'Log In',
+                  ),
+                ),
+              ),
+            ),
+            Padding(padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Material(
+                elevation: 5.0,
+                color: Colors.lightBlueAccent,
+                borderRadius: BorderRadius.circular(30.0),
+                child: MaterialButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, RegistrationScreen.id);
+                  },
+                  minWidth: 200.0,
+                  height: 42.0,
+                  child: Text(
+                    'Register',
+                  ),
+                ),
+              ),
             ),
           ],
         ),
