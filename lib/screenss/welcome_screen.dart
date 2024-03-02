@@ -14,12 +14,41 @@ class WelcomeScreen extends StatefulWidget{
 }
 
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin{
+
+  late AnimationController controller;
+  late Animation animation;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+        duration: Duration(seconds: 2),
+        vsync: this,
+         // upperBound: 100.0
+    );
+    animation = CurvedAnimation(parent: controller, curve: Curves.decelerate);
+    controller.forward();
+
+    controller.addListener(() {
+      setState(() {
+
+      });
+      print('controller.value =  ${animation.value}');
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
+      backgroundColor: Colors.red.withOpacity(animation.value),
       body: Padding(padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -28,7 +57,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Row(
               children: <Widget>[
                 Container(
-                  height: 60.0,
+                  // height: 60.0,
+                  height: animation.value*100,
                   child: Image.asset('images/logo.png'),
                 ),
                 Text('Flash Chat',
@@ -38,6 +68,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     fontWeight: FontWeight.w900,
                   ),
                 ),
+
+                // Hero(
+                //   tag: 'logo',
+                //   child: Container(
+                //     // height: 60.0,
+                //     height: controller.value,
+                //     child: Image.asset('images/logo.png'),
+                //   ),
+                // ),
+
               ],
             ),
             SizedBox(
