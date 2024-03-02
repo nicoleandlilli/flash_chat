@@ -35,7 +35,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
       setState(() {
 
       });
-      print('controller.value =  ${animation.value}');
     });
   }
 
