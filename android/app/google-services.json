@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458872256506",
+    "project_id": "flash-chat-cd28d",
+    "storage_bucket": "flash-chat-cd28d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458872256506:android:eb56919c5750b81d879643",
+        "android_client_info": {
+          "package_name": "com.startech.flash_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlOTmeZMHvUV2EvYq4-BLm7ZWs-9fVR2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
