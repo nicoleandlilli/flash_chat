@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/screenss/chat_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _auth = FirebaseAuth.instance;
+  late String email;
+  late String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,14 +36,20 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 48.0,
             ),
             TextField(
-              onChanged: (value) {},
+              style: TextStyle(color: Colors.black),
+              onChanged: (value) {
+                email = value;
+              },
               decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your Email'),
             ),
             SizedBox(
               height: 8.0,
             ),
             TextField(
-              onChanged: (value) {},
+              style: TextStyle(color: Colors.black),
+              onChanged: (value) {
+                password = value;
+              },
               decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your password'),
             ),
             SizedBox(
@@ -46,7 +58,17 @@ class _LoginScreenState extends State<LoginScreen> {
             RoundedButton(
                 title: 'Log In',
                 color: Colors.lightBlueAccent,
-                onPressed: () {}),
+                onPressed: () async {
+                  try{
+                    final UserCredential user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+                    if(user!=null){
+                      Navigator.pushNamed(context, ChatScreen.id);
+                    }
+                  }catch(e){
+                    print(e);
+                  }
+                }),
           ],
         ),
       ),
