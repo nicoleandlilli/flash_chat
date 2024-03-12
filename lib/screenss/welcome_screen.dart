@@ -58,11 +58,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
           children:<Widget> [
             Row(
               children: <Widget>[
-                Container(
-                  // height: 60.0,
-                  height: animation.value*100,
-                  child: Image.asset('images/logo.png'),
+                Hero(
+                  tag: 'logo',
+                  child: Container(
+                    // height: 60.0,
+                    // height: controller.value,
+                    height: animation.value*100,
+                    child: Image.asset('images/logo.png'),
+                  ),
                 ),
+
+                // Container(
+                //   // height: 60.0,
+                //   height: animation.value*100,
+                //   child: Image.asset('images/logo.png'),
+                // ),
+
                 // Text('Flash Chat',
                 //   style: TextStyle(
                 //     color: Colors.black54,
@@ -86,14 +97,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                   ),
                 ),
 
-                // Hero(
-                //   tag: 'logo',
-                //   child: Container(
-                //     // height: 60.0,
-                //     height: controller.value,
-                //     child: Image.asset('images/logo.png'),
-                //   ),
-                // ),
+
 
               ],
             ),
