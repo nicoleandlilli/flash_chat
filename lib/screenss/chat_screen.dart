@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../constants.dart';
 final _firebaseStore = FirebaseFirestore.instance;
 
 class ChatScreen extends StatefulWidget {
@@ -77,23 +79,25 @@ class _ChatScreenState extends State<ChatScreen>{
             MessageStream(),
             Container(
               // decoration: ,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(child: TextField(
-                    controller: messageTextController,
-                    onChanged: (value){
-                      messageText = value;
-                    },
-                    style: TextStyle(
-                        color: Colors.black
-                    ),
-                    // decoration: ,
-                  )),
-                  // FlatButton(
-                  // );
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(child: TextField(
+                      controller: messageTextController,
+                      onChanged: (value){
+                        messageText = value;
+                      },
+                      style: TextStyle(
+                          color: Colors.black
+                      ),
+                      decoration: kTextFieldDecoration.copyWith(hintText: 'Type your message here'),
+                    )),
+                    // FlatButton(
+                    // );
 
-                  TextButton(
+                    TextButton(
                       onPressed: (){
                         messageTextController.clear();
                         _firebaseStore.collection('messages').add({
@@ -105,30 +109,31 @@ class _ChatScreenState extends State<ChatScreen>{
                         'Send',
                         // style: ,
                       ),
-                  ),
+                    ),
 
 
-                  // TextButton(
-                  //   onPressed: ()  {
-                  //     getMessages();
-                  //   },
-                  //   child: Text(
-                  //     'Get',
-                  //     // style: ,
-                  //   ),
-                  // ),
+                    // TextButton(
+                    //   onPressed: ()  {
+                    //     getMessages();
+                    //   },
+                    //   child: Text(
+                    //     'Get',
+                    //     // style: ,
+                    //   ),
+                    // ),
 
 
-                  // TextButton(
-                  //   onPressed: ()  {
-                  //     getStreamMessages();
-                  //   },
-                  //   child: Text(
-                  //     'Stream Get',
-                  //
-                  //   ),
-                  // ),
-                ],
+                    // TextButton(
+                    //   onPressed: ()  {
+                    //     getStreamMessages();
+                    //   },
+                    //   child: Text(
+                    //     'Stream Get',
+                    //
+                    //   ),
+                    // ),
+                  ],
+                ),
               ),
             ),
           ],
