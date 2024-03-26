@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 final _firebaseStore = FirebaseFirestore.instance;
+final messageTextController = TextEditingController();
+final _auth = FirebaseAuth.instance;
+late User loggedInUser;
+late String messageText;
 
 class ChatScreen extends StatefulWidget {
 
@@ -16,10 +20,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen>{
-  final messageTextController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
-  late User loggedInUser;
-  late String messageText;
 
   @override
   void initState() {
@@ -100,9 +100,13 @@ class _ChatScreenState extends State<ChatScreen>{
                     TextButton(
                       onPressed: (){
                         messageTextController.clear();
+                        DateTime calDateTime = DateTime.now();
+
+                        final Timestamp  firestoreTimestamp = Timestamp.fromDate(calDateTime);
                         _firebaseStore.collection('messages').add({
                           'msg':messageText,
                           'sender': loggedInUser.email,
+                          'timestamp': firestoreTimestamp,
                         });
                       },
                       child: Text(
@@ -149,7 +153,8 @@ class MessageStream extends StatelessWidget{
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       // Stream<QuerySnapshot<T>> snapshots
-      stream: _firebaseStore.collection('messages').snapshots(),
+      // stream: _firebaseStore.collection('messages').snapshots(),
+      stream: _firebaseStore.collection('messages').orderBy('timestamp',descending: false).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if(!snapshot.hasData){
           return Center(
@@ -166,23 +171,37 @@ class MessageStream extends StatelessWidget{
           if(snapshot.data != null ){
             // // List<QueryDocumentSnapshot<T>>
             List<DocumentSnapshot> documents = snapshot.data!.docs;
-
+            // documents.reversed;
+            print('documents..........$documents');
             for(var document in documents){
               final messageMsg = document['msg'];
               final messageSender = document['sender'];
+              final timeStamp = document['timestamp'];
               print('msg..........$messageMsg');
               print('sender..........$messageSender');
 
-              final messageBubble = MessageBubble(sender: messageSender,text: messageMsg,);
+              // print('timeStamp..........$timeStamp');
+              print('document..........${document.data()}');
+
+              final currentUser = loggedInUser.email;
+
+              final messageBubble = MessageBubble(
+                sender: messageSender,
+                text: messageMsg,
+                isMe: currentUser==messageSender,
+              );
+
               messageBubbles.add(messageBubble);
             }
           }
 
           return Expanded(
               child: ListView(
+                // reverse: true,
                 children: messageBubbles,
               )
           );
+
 
         }else{
           print('snapshot.has no Data.................. ');
@@ -201,10 +220,11 @@ class MessageStream extends StatelessWidget{
 
 class MessageBubble extends StatelessWidget {
 
-  MessageBubble({required this.sender,required this.text});
+  MessageBubble({required this.sender,required this.text, required this.isMe});
 
   final String sender;
   final String text;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +232,7 @@ class MessageBubble extends StatelessWidget {
         padding: EdgeInsets.all(10.0),
 
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: isMe? CrossAxisAlignment.start:CrossAxisAlignment.end,
           children: [
             Text(
               sender,
@@ -224,19 +244,26 @@ class MessageBubble extends StatelessWidget {
             Material(
               elevation: 5.0,
               // borderRadius: BorderRadius.circular(30.0),
-              borderRadius: BorderRadius.only(
+              borderRadius:
+              isMe?
+              BorderRadius.only(
+                topRight: Radius.circular(30.0),
+                bottomLeft: Radius.circular(30.0),
+                bottomRight: Radius.circular(30.0),
+              ):
+              BorderRadius.only(
                 topLeft: Radius.circular(30.0),
                 bottomLeft: Radius.circular(30.0),
-                bottomRight: Radius.circular(30),
+                bottomRight: Radius.circular(30.0),
               ),
-              color: Colors.lightBlueAccent,
+              color: isMe?Colors.white:Colors.lightBlueAccent,
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 child: Text(
                   '$text',
                   style: TextStyle(
                       fontSize: 15.0,
-                      color: Colors.white
+                      color: isMe ? Colors.black54 : Colors.white,
                   ),
                 ),
               ),
